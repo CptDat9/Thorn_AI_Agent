@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  app:
+    image: rofl-container
+    volumes:
+      - type: bind
+        source: ./target/debug/thorn-agent
+        target: /app/thorn-agent
+    entrypoint: ["/app/thorn-agent"]
