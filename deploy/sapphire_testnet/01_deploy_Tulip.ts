@@ -6,6 +6,8 @@ import { ethers } from "hardhat";
 import { ADDRESSES } from "../../utils/constants";
 
 const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+    console.log("==== Deploying Tulip ====");
+
     const { deployments, getNamedAccounts, getChainId } = hre;
     const { deploy, get, execute } = deployments;
     const { deployer, agent, government } = await getNamedAccounts();
