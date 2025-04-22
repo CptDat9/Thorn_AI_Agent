@@ -11,7 +11,6 @@ const getQuote = async (params: any) => {
         console.error(`Fetching quote data from pathfinder: ${e}`);
     }
 };
-
 export const getQuoteRoute = async (params: any) => {
     const paramsQuote = {
         fromTokenAddress: params.fromTokenAddress,
