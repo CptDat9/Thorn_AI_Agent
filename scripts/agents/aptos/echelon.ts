@@ -11,7 +11,7 @@ import { LENDING_ASSETS_ABI } from "./abi/lending_assets";
 import { Aptos } from "@aptos-labs/ts-sdk";
 import { RESTClient } from "@initia/initia.js";
 import { Client } from "@thalalabs/surf/build/types/core/Client";
-import { aw } from "@aptos-labs/ts-sdk/dist/common/accountAddress-5ltp27oM";
+// import { aw } from "@aptos-labs/ts-sdk/dist/common/accountAddress-5ltp27oM";
 export class EchelonClient {
     aptos: Aptos | RESTClient;
     address: `0x${string}`;
