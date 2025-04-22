@@ -45,6 +45,7 @@ export class EchelonClient {
         })
         return fp64ToFloat(BigInt((result[0] as { v: string }).v));
     }
+    // Returns all markets
     async getAllMarkets(): Promise<string[]> {
         const result = await this.surfClient.view({
             payload: createViewPayload(LENDING_ASSETS_ABI, {
@@ -55,9 +56,10 @@ export class EchelonClient {
             }),
         });
         const markets = result[0].map((item: { inner: string }) => item.inner);
-        console.log("Danh sách thị trường:", markets);
+        // console.log("Danh sách markets:", markets);
         return markets;
     }
+    // Returns coin lists that market supported.
     async getMarketCoin(market: string): Promise<string> {
         try {
             const result = await this.surfClient
@@ -82,26 +84,23 @@ const main = async () => {
     const aptos = new Aptos({ fullnode: "https://fullnode.mainnet.aptoslabs.com/v1" });
     const contractAddress = "0xc6bc659f1649553c1a3fa05d9727433dc03843baac29473c817d06d39e7621ba";
     const echelon = new EchelonClient(aptos, contractAddress);
-
+    const usdcMarkets: { market: string; supplyApr: number; borrowApr: number }[] = [];
     try {
         const markets = await echelon.getAllMarkets();
         console.log("Danh sách markets:", markets);
-
-        if (markets.length > 0) {
-            const market = markets[0];
-            console.log("Kiểm tra borrow_interest_rate cho thị trường:", market);
-            const marketCoins = await echelon.getMarketCoin(market);
-            console.log("Danh sách market coins do ho tro:", marketCoins);
+        for (const market of markets) {
+            console.log("Danh sách market:", market);
+            const coin = await echelon.getMarketCoin(market);
+            console.log("Danh sách coins ma market do ho tro:", coin);
             const borrowApr = await echelon.getBorrowApr(market);
             const supplyApr = await echelon.getSupplyApr(market);
-            console.log("Borrow APR:", borrowApr.toFixed(2), "%");
-            console.log("Supply APR:", supplyApr.toFixed(2), "%");
-        } else {
-            console.log("Không tìm thấy market nào.");
+            console.log("Borrow APR:", (borrowApr*100), "%");
+            console.log("Supply APR:", (supplyApr*100), "%");
         }
     } catch (err) {
         console.error("Lỗi:", err);
     }
+
 };
 
-main().catch((err) => console.error("Lỗi tổng:", err));
+main().catch((err) => console.error("Lỗi all:", err));
