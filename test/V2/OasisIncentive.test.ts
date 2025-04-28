@@ -13,36 +13,24 @@ describe("Oasis Incentive tests", () => {
     let governance: HardhatEthersSigner;
     let user: HardhatEthersSigner;
     let snapshot: any;
-
     let usdc: ERC20Mintable;
     let thorn: ERC20Mintable;
     let oasisTreasury: OasisTreasury;
     let oasisIncentive: OasisIncentive;
-
-    const REWARD_PER_SECOND = ethers.parseUnits("0.00001", 18); // 0.00001 THORN per second (decimals = 18)
-    const LOCK_PERIOD = 3600; // 1 hour lock period
-    const DEPOSIT_AMOUNT = ethers.parseUnits("100", 6); // 100 USDC (decimals = 6)
-
+    const REWARD_PER_SECOND = ethers.parseUnits("0.00001", 18); // 0.00001 THORN / second (decimals = 18)
+    const LOCK_PERIOD = 3600; // 1 hour lock
+    const DEPOSIT_AMOUNT = ethers.parseUnits("100", 6); // 100 USDC 
     before(async () => {
         await deployments.fixture(["MOCK", "OasisTreasury", "OasisIncentive"]);
-
         [deployer, agent, governance, user] = await ethers.getSigners();
-
-        // Get USDC, THORN, OasisTreasury, and OasisIncentive from deployments
         usdc = ERC20Mintable__factory.connect((await get("USDC")).address, ethers.provider);
         thorn = ERC20Mintable__factory.connect((await get("THORN")).address, ethers.provider);
         oasisTreasury = OasisTreasury__factory.connect((await get("OasisTreasury")).address, ethers.provider);
         oasisIncentive = OasisIncentive__factory.connect((await get("OasisIncentive")).address, ethers.provider);
-
-        // Mint tokens
         await usdc.connect(deployer).mint(user.address, ethers.parseUnits("1000", 6)); // 1000 USDC for user
         await thorn.connect(deployer).mint(oasisIncentive.getAddress(), ethers.parseUnits("1000000", 18)); // 1M THORN for OasisIncentive
-
-        // Approve USDC for OasisIncentive
         await usdc.connect(user).approve(oasisIncentive.getAddress(), ethers.MaxUint256);
-
         snapshot = await takeSnapshot();
-
         console.log("treasury:", await oasisTreasury.getAddress());
         console.log("thorn:", await thorn.getAddress());
         console.log("governance:", governance.address);
