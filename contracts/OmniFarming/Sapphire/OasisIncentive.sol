@@ -10,15 +10,12 @@ import "../interfaces/ITreasury.sol";
 
 contract OasisIncentive is Initializable, Context {
     using SafeERC20 for IERC20;
-
-    // Constants
     uint256 public constant SCALE = 1e18;
-
-    // State variables
+    /* VARIABLES */
     address public governance;
-    address public thorn; // THORN token for rewards
-    address public treasury; // OasisTreasury contract
-    address public usdc; // USDC token
+    address public thorn; 
+    address public treasury;
+    address public usdc; 
     uint256 public rewardPerSecond;
     uint256 public lockPeriod;
     uint256 public numberOfUser;
@@ -27,12 +24,12 @@ contract OasisIncentive is Initializable, Context {
     uint256 public lastTimeUpdate;
     bool public isIncentiveEnable;
 
-    // Mappings
+    /* MAPPING */
     mapping(address => uint256) public numberOfStake;
     mapping(address => mapping(uint256 => StakeData)) public stakeInfo;
     mapping(address => bool) public isUser;
 
-    // Structs
+    /* STRUCT */
     struct StakeData {
         uint256 lp;
         uint256 lastRewardIndex;
