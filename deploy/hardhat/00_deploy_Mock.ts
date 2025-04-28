@@ -13,6 +13,13 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         log: true,
         autoMine: true,
     });
+    await deploy("THORN", {
+        contract: "ERC20Mintable",
+        from: deployer,
+        args: ["THORN", "THORN", 18],
+        log: true,
+        autoMine: true,
+    });
 
     await deploy("AssetForwarder", {
         contract: "AssetForwarder",
@@ -42,6 +49,13 @@ const deploy: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         from: deployer,
         args: [usdc.address],
         log: true,
+    });
+    const thorn = await deploy("THORN", {
+        contract: "ERC20Mintable",
+        from: deployer,
+        args: ["THORN", "THORN", 18],
+        log: true,
+        autoMine: true,
     });
 };
 deploy.tags = ["MOCK"];
